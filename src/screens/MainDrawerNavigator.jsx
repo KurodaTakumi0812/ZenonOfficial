@@ -4,9 +4,8 @@ import { StyleSheet, Text, View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 
-import ELMScreen from './ELMScreen';
-import NotificationScreen from './NotificationScreen';
-import { HeaderBackground } from '@react-navigation/stack';
+import MainTabNavigator from './MainTabNavigator';
+import SettingScreen from './SettingsScreen';
 
 const Drawer = createDrawerNavigator();
 
@@ -27,7 +26,7 @@ function MyDrawer() {
   return (
     <Drawer.Navigator
       drawerContent={props => <CustomDrawerContent {...props} />}
-      initialRouteName="お知らせ"
+      initialRouteName="MainTab"
       screenOptions={{
         headerShown: true,
         headerTitle: 'Zenon',
@@ -36,13 +35,20 @@ function MyDrawer() {
         headerTintColor: '#FFFFFF',
       }}
     >
-      <Drawer.Screen name="入室チェック" component={ELMScreen} />
-      <Drawer.Screen name="お知らせ" component={NotificationScreen} />
+      <Drawer.Screen name="MainTab" component={MainTabNavigator} />
+      <Drawer.Screen
+        name="Setting"
+        options={{
+          headerTitle: '設定',
+          headerStyle: { backgroundColor: '#3E42A7' },
+        }}
+        component={SettingScreen}
+      />
     </Drawer.Navigator>
   );
 }
 
-export default function NotificationDrawerScreen() {
+export default function MainDrawerNavigator() {
   return (
     <MyDrawer />
   );

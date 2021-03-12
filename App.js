@@ -2,48 +2,53 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 
-import ELMScreen from './src/screens/ELMScreen';
-import NotificationScreen from './src/screens/NotificationScreen';
-import ELMDrawerScreen from './src/screens/ELMDrawerScreen';
-import NotificationDrawerScreen from './src/screens/NotificationDrawerScreen';
+import NotificationDetailScreen from './src/screens/NotificationDetailScreen';
+import MainDrawerNavigator from './src/screens/MainDrawerNavigator';
+import AddStudentScreen from './src/screens/AddStudentScreen';
 
-const Tab = createBottomTabNavigator();
+const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === '入室チェック') {
-              iconName = focused
-                ? 'door-open'
-                : 'door-open';
-              return <FontAwesome5 name={iconName} size={size} color={color} />;
-            } else if (route.name === 'お知らせ') {
-              iconName = focused
-                ? 'notification'
-                : 'notification';
-              return <AntDesign name={iconName} size={size} color={color} />
-            }
-          },
-        }
-        )}
-        tabBarOptions={{
-          activeTintColor: 'white',
-          inactiveBackgroundColor: '#333399',
-          activeBackgroundColor: '#5BB57A',
-          inactiveBackgroundColor: '#A9DEBB',
-        }}
+      <Stack.Navigator
+        initialRouteName="MainDrawer"
       >
-        <Tab.Screen name="入室チェック" component={ELMDrawerScreen} />
-        <Tab.Screen name="お知らせ" component={NotificationDrawerScreen} options={{ tabBarBadge: 2 }} />
-      </Tab.Navigator>
+        <Stack.Screen
+          name="MainDrawer"
+          component={MainDrawerNavigator}
+          options={{
+            headerShown: false
+          }} />
+        <Stack.Screen
+          name="NotificationDetail"
+          component={NotificationDetailScreen}
+          options={{
+            title: '詳細',
+            headerStyle: {
+              backgroundColor: '#5BB57A',
+            },
+            headerTintColor: '#FFFFFF',
+            headerTitleStyle: {
+              fontWeight: 'bold',
+            },
+          }} />
+        <Stack.Screen
+          name="AddStudent"
+          component={AddStudentScreen}
+          options={{
+            title: '生徒の登録',
+            headerStyle: {
+              backgroundColor: '#3E42A7',
+            },
+            headerTintColor: '#FFFFFF',
+          }} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
