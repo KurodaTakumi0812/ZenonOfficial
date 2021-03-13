@@ -1,15 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
+import { LogBox } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome5 } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import firebase from 'firebase';
 
 import NotificationDetailScreen from './src/screens/NotificationDetailScreen';
 import MainDrawerNavigator from './src/screens/MainDrawerNavigator';
 import AddStudentScreen from './src/screens/AddStudentScreen';
+
+import { firebaseConfig } from './env';
+
+if (firebase.apps.length === 0) {
+  firebase.initializeApp(firebaseConfig);
+}
+require('firebase/firestore');
+
+LogBox.ignoreLogs(['Setting a timer']);
 
 const Stack = createStackNavigator();
 
