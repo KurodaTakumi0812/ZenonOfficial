@@ -12,6 +12,8 @@ import firebase from 'firebase';
 import NotificationDetailScreen from './src/screens/NotificationDetailScreen';
 import MainDrawerNavigator from './src/screens/MainDrawerNavigator';
 import AddStudentScreen from './src/screens/AddStudentScreen';
+import InquiriesScreen from './src/screens/InquiriesScreens';
+import SettingsScreen from './src/screens/SettingsScreen';
 
 import { firebaseConfig } from './env';
 
@@ -50,10 +52,30 @@ export default function App() {
             },
           }} />
         <Stack.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{
+            title: '設定',
+            headerStyle: {
+              backgroundColor: '#3E42A7',
+            },
+            headerTintColor: '#FFFFFF',
+          }} />
+        <Stack.Screen
           name="AddStudent"
           component={AddStudentScreen}
           options={{
             title: '生徒の登録',
+            headerStyle: {
+              backgroundColor: '#3E42A7',
+            },
+            headerTintColor: '#FFFFFF',
+          }} />
+        <Stack.Screen
+          name="Inquiries"
+          component={InquiriesScreen}
+          options={{
+            title: 'お問い合わせ',
             headerStyle: {
               backgroundColor: '#3E42A7',
             },
