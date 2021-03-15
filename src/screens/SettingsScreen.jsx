@@ -12,24 +12,54 @@ export default function SettingsScreen(props) {
   const { navigation } = props;
   const [studentID, setStudentID] = useState('');
   const [registered, setRegistered] = useState([]);
+  const [update, setUpdate] = useState('')
 
   let studentLength;
   let memberId;
 
   useEffect(() => {
-    let unsubscribe = () => { };
-    unsubscribe = storage.load({ key: 'student1' }).then(res => {
-      const students = [];
-      studentLength = Object.keys(res).length
-      students.push({
-        id: res.id,
-        familyName: res.name[0],
-        firstName: res.name[1],
-      })
+    let students = [];
+    storage.load({ key: 'student1' }).then(res => {
+      students.push(res)
       setRegistered(students);
-      console.log(registered);
+    }).catch(() => {
+      storage.load({ key: 'student2' }).then(() => { }).catch(() => {
+        storage.load({ key: 'student3' }).then(() => { }).catch(() => { setRegistered([]) });
+      });
     });
-  }, []);
+    storage.load({ key: 'student2' }).then(res => {
+      students.push(res)
+      setRegistered(students);
+    }).catch(() => { });
+    storage.load({ key: 'student3' }).then(res => {
+      students.push(res)
+      setRegistered(students);
+    }).catch(() => { });
+    if (registered.length === 0) {
+      console.log('0だよ')
+    } else {
+      console.log('0じゃないよ')
+      console.log(registered)
+    }
+  }, [update]);
+
+
+  function deleteStudent(key, familyName, firstName) {
+    console.log(key)
+    Alert.alert('確認', `${familyName}   ${firstName}  さんの登録を削除してよろしいですか？`, [
+      {
+        text: 'キャンセル',
+        onPress: () => { }
+      },
+      {
+        text: '削除',
+        onPress: () => {
+          storage.remove({ key: key });
+          setUpdate(update + 1)
+        }
+      },
+    ]);
+  }
 
   function renderItem({ item }) {
     return (
@@ -37,16 +67,16 @@ export default function SettingsScreen(props) {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name="person-circle-outline" size={32} color="#5BB57A" />
           <Text style={{ marginLeft: 16 }}>{item.id}</Text>
-          <Text style={{ fontSize: 24, marginLeft: 16 }}>黒田　拓良</Text>
+          <Text style={{ fontSize: 24, marginLeft: 16 }}>{item.name[0]}  {item.name[1]}</Text>
         </View>
-        <TouchableOpacity onPress={() => { Alert.alert('削除') }}>
+        <TouchableOpacity onPress={() => { deleteStudent(item.key, item.name[0], item.name[1]) }}>
           <Entypo style={{}} name="cross" size={24} color="#868686" />
         </TouchableOpacity>
       </View>
     );
   }
 
-  if (studentLength === 0) {
+  if (registered.length === 0) {
     return (
       <View style={styles.container}>
         <View>
@@ -61,19 +91,6 @@ export default function SettingsScreen(props) {
                 color='#3E42A7'
                 onPress={() => { navigation.navigate('AddStudent') }}
               >生徒の登録</Button>
-            </View>
-          </View>
-
-          <View>
-            <View style={styles.studentList}>
-              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                <Ionicons name="person-circle-outline" size={32} color="#5BB57A" />
-                <Text style={{ marginLeft: 16 }}>99-9999</Text>
-                <Text style={{ fontSize: 24, marginLeft: 16 }}>黒田　拓良</Text>
-              </View>
-              <TouchableOpacity onPress={() => { Alert.alert('削除') }}>
-                <Entypo style={{}} name="cross" size={24} color="#868686" />
-              </TouchableOpacity>
             </View>
           </View>
 
@@ -98,7 +115,8 @@ export default function SettingsScreen(props) {
               renderItem={renderItem}
               keyExtractor={(item) => item.id}
             />
-            <View style={{ marginTop: 24 }}>
+            <Text style={{ alignSelf: 'flex-end' }}>登録できるのは3人までです。</Text>
+            <View style={{ marginTop: 24, marginBottom: 16, justifyContent: 'center', paddingHorizontal: 16 }}>
               <Button
                 mode="contained"
                 color='#3E42A7'
@@ -141,5 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: 16,
+    borderBottomWidth: 1,
+    borderColor: 'rgba(0,0,0,0.2)'
   },
 });

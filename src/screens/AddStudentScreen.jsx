@@ -16,7 +16,7 @@ export default function AddStudentScreen() {
     storage.remove({ key: 'student3' });
   }
 
-  function storageLog() {
+  async function storageLog() {
     storage.load({ key: 'student1' }).then(data => {
       console.log(data);
     })
@@ -41,6 +41,7 @@ export default function AddStudentScreen() {
           storage.save({
             key: 'student3',
             data: {
+              key: 'student3',
               id: id,
               name: [familyName, firstName],
             }
@@ -50,6 +51,7 @@ export default function AddStudentScreen() {
         storage.save({
           key: 'student2',
           data: {
+            key: 'student2',
             id: id,
             name: [familyName, firstName],
           }
@@ -59,6 +61,7 @@ export default function AddStudentScreen() {
       storage.save({
         key: 'student1',
         data: {
+          key: 'student1',
           id: id,
           name: [familyName, firstName],
         }
