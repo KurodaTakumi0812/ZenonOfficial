@@ -18,6 +18,30 @@ export default function SettingsScreen(props) {
   let memberId;
 
   useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      let students = [];
+      storage.load({ key: 'student1' }).then(res => {
+        students.push(res)
+        setRegistered(students);
+      }).catch(() => {
+        storage.load({ key: 'student2' }).then(() => { }).catch(() => {
+          storage.load({ key: 'student3' }).then(() => { }).catch(() => { setRegistered([]) });
+        });
+      });
+      storage.load({ key: 'student2' }).then(res => {
+        students.push(res)
+        setRegistered(students);
+      }).catch(() => { });
+      storage.load({ key: 'student3' }).then(res => {
+        students.push(res)
+        setRegistered(students);
+      }).catch(() => { });
+      console.log('更新')
+    });
+    return unsubscribe;
+  }, [navigation]);
+
+  useEffect(() => {
     let students = [];
     storage.load({ key: 'student1' }).then(res => {
       students.push(res)

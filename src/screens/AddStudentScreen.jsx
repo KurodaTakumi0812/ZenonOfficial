@@ -5,7 +5,8 @@ import { TextInput, Button } from 'react-native-paper';
 import { storage } from '../../storage'
 import firebase from 'firebase';
 
-export default function AddStudentScreen() {
+export default function AddStudentScreen(props) {
+  const { navigation } = props
   const [studentID, setStudentID] = useState('');
   const [token, setToken] = useState('');
   let member
@@ -163,6 +164,8 @@ export default function AddStudentScreen() {
     </View>
   );
 }
+
+
 
 const styles = StyleSheet.create({
   container: {
