@@ -1,17 +1,59 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from 'firebase';
+
+import NewBadge from '../components/NewBadge';
+import { announcementDateToString } from '../utils';
 
 export default function NotificationScreen(props) {
   const { navigation } = props;
+  const [list, setList] = useState([]);
+
+  useEffect(() => {
+    const db = firebase.firestore();
+    let unsubscribe = () => { };
+    const ref = db.collection('announcements').orderBy('date', 'desc');
+    unsubscribe = ref.onSnapshot((snapshot) => {
+      const getList = [];
+      snapshot.forEach((doc) => {
+        const data = doc.data();
+        getList.push({
+          id: doc.id,
+          title: data.title,
+          body: data.body,
+          date: data.date.toDate(),
+        });
+      });
+      setList(getList);
+      console.log(getList);
+    }, (error) => {
+      Alert.alert('データの読み込みに失敗しました', '時間をあけて再度お試しください。')
+    });
+    return unsubscribe;
+  }, []);
+
+  function renderItem({ item }) {
+    return (
+      <TouchableOpacity style={styles.notificationContainer} onPress={() => { navigation.navigate('NotificationDetail', { date: announcementDateToString(item.date), title: item.title, body: item.body }) }}>
+        <View style={{ flexDirection: 'row' }}>
+          <NewBadge date={item.date} />
+          <Text style={styles.textDate}>{announcementDateToString(item.date)}</Text>
+        </View>
+        <Text style={styles.textTitle}>{item.title}</Text>
+      </TouchableOpacity>
+    );
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.notificationContainer} onPress={() => { navigation.navigate('NotificationDetail') }}>
-        <Text style={styles.textDate}>2021-03-25 22:00</Text>
-        <Text style={styles.textTitle}>Zenon公式アプリリリースのお知らせ</Text>
-      </TouchableOpacity>
+      <FlatList
+        data={list}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+      />
       <StatusBar style="auto" />
     </View>
   );

@@ -98,7 +98,13 @@ export default function AddStudentScreen(props) {
             },
             {
               text: '登録',
-              onPress: () => { saveStorage(id, doc.get('familyName'), doc.get('firstName')) }
+              onPress: () => {
+                saveStorage(id, doc.get('familyName'), doc.get('firstName'))
+                setStudentID('');
+                setToken('');
+                Alert.alert('登録成功しました')
+              }
+
             },
           ]);
         } else {

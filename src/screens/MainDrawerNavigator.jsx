@@ -26,19 +26,28 @@ function CustomDrawerContent(props) {
       <DrawerItemList {...props} />
       <DrawerItem
         label="設定"
-        onPress={() => { navigation.navigate('Settings') }}
+        onPress={() => {
+          navigation.closeDrawer();
+          navigation.navigate('Settings')
+        }}
         icon={config => <View style={styles.iconSetting} ><Ionicons name="settings-sharp" size={20} color="#FFFFFF" /></View>}
       />
       <Text style={{ color: '#868686', marginLeft: 8 }}>その他</Text>
       <View style={{ borderBottomColor: '#868686', borderBottomWidth: 1, marginTop: 8 }} />
       <DrawerItem
         label="公式サイト"
-        onPress={() => { Linking.openURL("https://www.google.co.jp/") }}
+        onPress={() => {
+          navigation.closeDrawer();
+          Linking.openURL("https://www.google.co.jp/")
+        }}
         icon={config => <View style={styles.iconOfficial}><Entypo name="home" size={20} color="#FFFFFF" /></View>}
       />
       <DrawerItem
         label="アクセス・問い合わせ"
-        onPress={() => { navigation.navigate('Inquiries') }}
+        onPress={() => {
+          navigation.closeDrawer();
+          navigation.navigate('Inquiries')
+        }}
         icon={config => <View style={styles.iconInquiries}><Foundation name="telephone" size={20} color="#FFFFFF" /></View>}
       />
     </DrawerContentScrollView>

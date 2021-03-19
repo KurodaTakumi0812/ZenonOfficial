@@ -90,7 +90,7 @@ export default function SettingsScreen(props) {
       <View style={styles.studentList}>
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name="person-circle-outline" size={32} color="#5BB57A" />
-          <Text style={{ marginLeft: 16 }}>{item.id}</Text>
+          <Text style={{ marginLeft: 16 }}>{item.id.substr(0, 2)}-{item.id.substr(2)}</Text>
           <Text style={{ fontSize: 24, marginLeft: 16 }}>{item.name[0]}  {item.name[1]}</Text>
         </View>
         <TouchableOpacity onPress={() => { deleteStudent(item.key, item.name[0], item.name[1]) }}>

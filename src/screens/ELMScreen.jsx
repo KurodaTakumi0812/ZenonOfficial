@@ -8,6 +8,7 @@ import firebase from 'firebase';
 
 import { logInTimeToString } from '../utils';
 import { logOutTimeToString } from '../utils';
+import Loading from '../components/Loading';
 
 import NotificationScreen from './NotificationScreen';
 
@@ -15,11 +16,13 @@ export default function ELMScreen(props) {
   const { navigation } = props;
   const [registered, setRegistered] = useState([]);
   const [update, setUpdate] = useState('')
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     const db = firebase.firestore();
     const ref = db.collection('students');
     const unsubscribe = navigation.addListener('focus', () => {
+      setLoading(true);
       let students = [];
       storage.load({ key: 'student1' }).then(res => {
         ref.doc(res.id).onSnapshot((doc) => {
@@ -89,8 +92,9 @@ export default function ELMScreen(props) {
             students.sort(compare);
             setRegistered(students);
           }
+          setLoading(false);
         })
-      }).catch(() => { });
+      }).catch(() => { setLoading(false); });
       console.log(students)
     });
     return unsubscribe;
@@ -154,6 +158,7 @@ export default function ELMScreen(props) {
   if (registered.length === 0) {
     return (
       <View style={styles.emptyContainer}>
+        <Loading loading={loading} />
         <Text>登録されている生徒がいません。設定画面から生徒の登録を行ってください。</Text>
         <Button
           style={{ marginTop: 40 }}
@@ -166,6 +171,7 @@ export default function ELMScreen(props) {
   } else {
     return (
       <View style={styles.container}>
+        <Loading loading={loading} />
         <FlatList
           data={registered}
           renderItem={renderItem}
