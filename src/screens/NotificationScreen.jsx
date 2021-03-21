@@ -1,12 +1,14 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Alert, FlatList } from 'react-native';
+import { StyleSheet, Text, View, Alert, FlatList, Dimensions } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from 'firebase';
 
 import NewBadge from '../components/NewBadge';
 import { announcementDateToString } from '../utils';
+
+const { height, width } = Dimensions.get('window');
 
 export default function NotificationScreen(props) {
   const { navigation } = props;
@@ -42,7 +44,7 @@ export default function NotificationScreen(props) {
           <NewBadge date={item.date} />
           <Text style={styles.textDate}>{announcementDateToString(item.date)}</Text>
         </View>
-        <Text style={styles.textTitle}>{item.title}</Text>
+        <Text style={styles.textTitle} numberOfLines={1} ellipsizeMode='tail'>{item.title}</Text>
       </TouchableOpacity>
     );
   }
@@ -67,7 +69,6 @@ const styles = StyleSheet.create({
   notificationContainer: {
     backgroundColor: '#FFFFFF',
     width: '100%',
-    height: 64,
     borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.15)'
   },
@@ -80,6 +81,8 @@ const styles = StyleSheet.create({
   textTitle: {
     fontSize: 18,
     marginTop: 2,
+    marginBottom: 8,
     marginLeft: 40,
-  }
+    width: width - 48,
+  },
 });

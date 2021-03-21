@@ -1,12 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 import { storage } from '../../storage'
 
 import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
+import { el } from 'date-fns/locale';
+
+const { height, width } = Dimensions.get('window');
 
 export default function SettingsScreen(props) {
   const { navigation } = props;
@@ -91,9 +94,9 @@ export default function SettingsScreen(props) {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Ionicons name="person-circle-outline" size={32} color="#5BB57A" />
           <Text style={{ marginLeft: 16 }}>{item.id.substr(0, 2)}-{item.id.substr(2)}</Text>
-          <Text style={{ fontSize: 24, marginLeft: 16 }}>{item.name[0]}  {item.name[1]}</Text>
+          <Text style={{ fontSize: 24, marginLeft: 16, width: width - 180 }} numberOfLines={1} ellipsizeMode='tail'>{item.name[0]}  {item.name[1]}</Text>
         </View>
-        <TouchableOpacity onPress={() => { deleteStudent(item.key, item.name[0], item.name[1]) }}>
+        <TouchableOpacity style={styles.deleteButton} onPress={() => { deleteStudent(item.key, item.name[0], item.name[1]) }}>
           <Entypo style={{}} name="cross" size={24} color="#868686" />
         </TouchableOpacity>
       </View>
@@ -185,5 +188,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     borderBottomWidth: 1,
     borderColor: 'rgba(0,0,0,0.2)'
+  },
+  deleteButton: {
+    position: 'absolute',
+    right: 16
   },
 });

@@ -1,6 +1,6 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, Image, FlatList } from 'react-native';
+import React, { useState, useLayoutEffect } from 'react';
+import { StyleSheet, Text, View, Image, FlatList, Dimensions } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { Button } from 'react-native-paper';
 import { storage } from '../../storage'
@@ -12,13 +12,15 @@ import Loading from '../components/Loading';
 
 import NotificationScreen from './NotificationScreen';
 
+const { height, width } = Dimensions.get('window');
+
 export default function ELMScreen(props) {
   const { navigation } = props;
   const [registered, setRegistered] = useState([]);
   const [update, setUpdate] = useState('')
   const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const db = firebase.firestore();
     const ref = db.collection('students');
     const unsubscribe = navigation.addListener('focus', () => {
@@ -123,8 +125,8 @@ export default function ELMScreen(props) {
           <View style={styles.containerRightSide}>
             <Text style={{ fontSize: 18 }}>{item.id.substr(0, 2)}-{item.id.substr(2)}</Text>
             <View style={styles.nameContainer}>
-              <Text style={{ fontSize: 28 }}>{item.familyName}   {item.firstName}</Text>
-              <Text style={{ fontSize: 18, marginRight: 24 }}>さん</Text>
+              <Text style={{ fontSize: 26, width: width - 216 }} numberOfLines={1} ellipsizeMode='tail'>{item.familyName}   {item.firstName}</Text>
+              <Text style={{ fontSize: 18, right: 24, position: 'absolute' }}>さん</Text>
             </View>
             <Text style={{ fontSize: 18, color: '#3561D3' }}>【入室中】</Text>
             <Text style={{ fontSize: 14, alignSelf: 'flex-end', marginRight: 24 }}>入室時間</Text>
@@ -142,8 +144,8 @@ export default function ELMScreen(props) {
           <View style={styles.containerRightSide}>
             <Text style={{ fontSize: 18 }}>{item.id.substr(0, 2)}-{item.id.substr(2)}</Text>
             <View style={styles.nameContainer}>
-              <Text style={{ fontSize: 28 }}>{item.familyName}   {item.firstName}</Text>
-              <Text style={{ fontSize: 18, marginRight: 24 }}>さん</Text>
+              <Text style={{ fontSize: 26, width: width - 216 }} numberOfLines={1} ellipsizeMode='tail'>{item.familyName}   {item.firstName}</Text>
+              <Text style={{ fontSize: 18, right: 24, position: 'absolute' }}>さん</Text>
             </View>
             <Text style={{ fontSize: 18, color: '#868686' }}>【退室中】</Text>
             <Text style={{ fontSize: 14, alignSelf: 'flex-end', marginRight: 24 }}>最終退室時間</Text>

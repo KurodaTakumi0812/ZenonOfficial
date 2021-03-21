@@ -35,11 +35,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0F4F8',
   },
   titleContainer: {
-    height: 96,
+    //height: 96,
+    paddingVertical: 16,
+    paddingHorizontal: 16,
     width: '100%',
     backgroundColor: '#5BB57A',
     justifyContent: 'center',
-    paddingLeft: 8,
   },
   textDate: {
     color: '#FFFFFF',
